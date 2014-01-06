@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'nokogiri'
 require 'open-uri'
+require 'fileutils'
 
 class Scraper
   BASE_URL = "http://www.whitehouse.gov"
@@ -14,6 +15,7 @@ class Scraper
 
   def scrape
     puts "Started Scraping"
+    FileUtils.mkdir_p "speeches"
     START_PAGE.upto END_PAGE do |page_index|
       puts "Scraping page: #{page_index}"
       scrape_page Nokogiri::HTML(open(page_url(page_index)))
@@ -40,7 +42,7 @@ private
   end
 
   def link_to_file link
-    link.split("/")[2..-1].join("-")
+    "speeches/#{link.split("/")[2..-1].join("-")}"
   end
 
   def page_url(page_index)
